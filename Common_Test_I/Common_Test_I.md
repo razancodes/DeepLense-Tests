@@ -1,9 +1,10 @@
-# Common Test I: Multi-Class Gravitational Lensing Classification — ResNet34 Experiment Report
+# Common Test I: Multi-Class Gravitational Lensing Classification — Experiment Report
 
-**Project:** ML4SCI DeepLense Foundation Model (GSoC 2026)  
-**Author:** Muhammed Razan  
+**Project:** ML4SCI DeepLense Foundation Model [DEEPLENSE4] as part of GSoC 2026.  
+**Contributor:** Muhammed Razan
+**Project Mentors:** Michael Toomey ,Sergei Gleyzer, Pranath Reddy, Anna Parul, J Rishi. 
 **Task:** Common Test I — Multi-Class Classification  
-**Model:** ResNet34 (Transfer Learning)
+**Model used:** ResNet34 as the backbone.
 
 ---
 
@@ -21,24 +22,7 @@ The images are stored as `.npy` files (NumPy arrays), representing simulated sin
 
 ---
 
-## 2. Environment and Dependencies
-
-| Dependency | Purpose |
-|---|---|
-| `PyTorch` | Deep learning framework |
-| `torchvision` | Pre-trained models (ResNet34) |
-| `timm` | Model utilities |
-| `scikit-learn` | Metrics (AUC, confusion matrix, classification report) |
-| `matplotlib` / `seaborn` | Visualization |
-| `einops` | Tensor manipulation |
-| `numpy` | Array operations |
-| `tqdm` | Progress bars |
-
-**Hardware:** CUDA GPU (confirmed at runtime: `Device: cuda`)
-
----
-
-## 3. Configuration
+## 2. Configuration
 
 All hyperparameters are managed via a centralized `Config` dataclass:
 
@@ -77,7 +61,7 @@ class Config:
 
 ---
 
-## 4. Dataset
+## 3. Dataset
 
 ### Statistics
 
@@ -105,19 +89,19 @@ Files are `.npy` format (NumPy binary arrays). Directory names map to logical cl
 
 ### Train/Val Split
 
-The dataset uses a **pre-defined directory split** (`train/` and `val/`) with a ~90/10 proportion. This eliminates data leakage between splits.
+The dataset uses a **pre-defined directory split** (`train/` and `val/`). This eliminates data leakage between splits.
 
 ---
 
-## 5. Data Preprocessing and Augmentation
+## 4. Data Preprocessing and Augmentation
 
 ### Physics-Informed Preprocessing using ArcSinh
 
 ArcSinh Strech Formula:
 
-\begin{equation}
+$$
     f(x) = \ln\left(a \cdot x + \sqrt{(a \cdot x)^2 + 1}\right)
-\end{equation}
+$$
 
 here $a = 5.0$ was used, it is the softening parameter controlling the degree of compression. This transformation suppresses bright arc saturation while simultaneously amplifying faint substructure signals in the low-intensity regime, making it particularly effective for differentiating dark-matter models that manifest as subtle perturbations to the lensing signal.
 <img width="1607" height="709" alt="image" src="https://github.com/user-attachments/assets/3bd9db99-46d7-4114-b5fa-01d119213046" />
@@ -138,9 +122,9 @@ here $a = 5.0$ was used, it is the softening parameter controlling the degree of
 
 ---
 
-## 6. Model Architecture
+## 5. Model Architecture
 
-**ResNet34** (34-layer Residual Network) with **ImageNet pre-trained weights**, fine-tuned end-to-end on the lensing dataset.
+**ResNet34** (34-layer Residual Network) with **ImageNet1K pre-trained weights**, fine-tuned end-to-end on the lensing dataset.
 
 ### Architecture Summary
 
@@ -171,7 +155,7 @@ Input: (B, 3, 224, 224)
 
 ---
 
-## 7. Loss Function
+## 6. Loss Function
 
 **Cross-Entropy Loss with Label Smoothing** (`label_smoothing=0.1`)
 
@@ -179,7 +163,7 @@ With `eps=0.1` and `K=3` classes, the soft target is `(1-eps)` for the true clas
 
 ---
 
-## 8. Training Protocol
+## 7. Training Protocol
 
 ### Optimizer and Learning Rate Schedule
 
@@ -202,11 +186,11 @@ For each epoch:
 
 ---
 
-## 9. Training Metrics — Epoch-by-Epoch Results
+## 8. Training Metrics — Epoch-by-Epoch Results
 
 <img width="2144" height="616" alt="image" src="https://github.com/user-attachments/assets/730607f2-9578-49bc-9049-12bed7e942f2" />
 
-## 10. Final Results Summary
+## 9. Final Results Summary
 
 | Metric | Value |
 |---|---|
@@ -223,7 +207,7 @@ For each epoch:
 
 
 
-## 11. Observations and Discussion
+## 9. Observations and Discussion
 
 ### Strengths
 1. **High AUC (0.9947):** Near-ceiling performance, demonstrating effective transfer learning from ImageNet to gravitational lensing.
@@ -234,36 +218,7 @@ For each epoch:
 ### Limitations and Areas for Improvement
 1. **Single-channel to 3-channel duplication:** Native lensing images are single-channel; channel duplication introduces a slight domain gap vs. ImageNet.
 2. **Limited augmentation:** No rotation, flipping, or cropping — physics-preserving augmentations could improve robustness.
-3. **No architecture ablation:** Comparing ResNet50, EfficientNet, or ViT would establish whether ResNet34 is truly optimal.
-4. **Label smoothing interaction:** With balanced classes, epsilon=0.1 may slightly suppress precision on hard examples.
+3. **Label smoothing interaction:** With balanced classes, epsilon=0.1 may slightly suppress precision on hard examples.
 
 ---
-
-## 12. Relation to the Foundation Model Goal
-
-This experiment establishes the **supervised ResNet34 baseline** (Common Test I) for the ML4SCI DeepLense GSoC 2026 proposal. The AUC of **0.9947** is the reference point against which more advanced approaches are compared:
-
-- **Physics-Informed Neural Networks (PINNs):** Integrate the SIS gravitational lensing equation as a physics constraint
-- **Masked Autoencoder (MAE) Foundation Models:** Self-supervised pre-training at 75% and 90% masking ratios, followed by fine-tuning
-- **Vision Transformer (ViT):** Attention-based architectures for capturing long-range spatial dependencies
-
-The goal across these experiments is to show that physics-aware and self-supervised methods can match or surpass the strong ResNet34 baseline while generalizing better to new lensing configurations.
-
----
-
-## 13. Reproducibility Checklist
-
-| Item | Status |
-|---|---|
-| Random seeds fixed (`SEED=42`) | Yes |
-| Pre-split train/val directories | Yes |
-| Hyperparameters in `Config` dataclass | Yes |
-| Best checkpoint saved to Drive | Yes |
-| Figures saved to `./figures/` | Yes |
-| GPU device logged at startup | Yes |
-| Dataset existence check before extraction | Yes |
-
----
-
-*Report based on: `Common_Test_I_ResNet34 (1).ipynb`*  
-*Best Validation AUC: **0.9947** | Total Epochs: 30 | Dataset: 37,500 balanced lensing images (3 classes)*
+By Muhammed Razan.
