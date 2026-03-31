@@ -219,8 +219,7 @@ For each epoch:
 
 ### Limitations and Areas for Improvement
 1. **Single-channel to 3-channel duplication:** Native lensing images are single-channel; channel duplication introduces a slight domain gap vs. ImageNet.
-2. **Limited augmentation:** No rotation, flipping, or cropping — physics-preserving augmentations could improve robustness.
-3. **Label smoothing interaction:** With balanced classes, epsilon=0.1 may slightly suppress precision on hard examples.
+2. **Label smoothing interaction:** With balanced classes, epsilon=0.1 may slightly suppress precision on hard examples.
 
 ---
 By Muhammed Razan.
