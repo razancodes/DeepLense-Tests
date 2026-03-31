@@ -238,6 +238,7 @@ For each epoch:
 | 30 | 0.3239 | 0.984 | 0.9983 | 0.3579 | 0.969 | 0.9943 | 1.00e-06 |
 
 ---
+<img width="2144" height="616" alt="image" src="https://github.com/user-attachments/assets/730607f2-9578-49bc-9049-12bed7e942f2" />
 
 ## 10. Final Results Summary
 
@@ -261,100 +262,7 @@ For each epoch:
 
 ---
 
-## 11. Convergence and Learning Dynamics Analysis
 
-### Phase 1: Warmup (Epochs 1-5)
-- LR linearly ramps from `2e-5` to `1e-4`
-- Rapid learning: Train accuracy jumps from **33.6% to 89.2%**; Val AUC from **0.5062 to 0.9793**
-- The model quickly leverages pre-trained ImageNet features for lensing classification
-
-### Phase 2: Peak Performance (Epochs 5-15)
-- LR begins cosine decay from `1e-4`
-- Steady improvement in both training and validation metrics
-- New best AUCs achieved at nearly every epoch
-- Val AUC reaches 0.9915 by epoch 15
-
-### Phase 3: Late Refinement (Epochs 15-27)
-- LR falls from ~`6e-5` to ~`4e-6`
-- Smaller but consistent gains in both AUC and accuracy
-- Best Val AUC of **0.9947** reached at epoch 27
-
-### Phase 4: Marginal Plateau (Epochs 27-30)
-- Training metrics continue to marginally improve
-- Validation metrics plateau (~0.9942-0.9943 range)
-- No significant overfitting observed
-
-### Generalization Gap
-- Train-val AUC gap remains very small (~0.003-0.004) — **excellent generalization**
-- No signs of severe overfitting despite 30 epochs of full fine-tuning
-- Validation loss closely tracks training loss throughout
-
----
-
-## 12. Visualizations
-
-The notebook produces the following visualizations (saved to `./figures/`):
-
-### 1. Class Distribution Bar Chart
-- Shows **perfectly balanced** dataset (12,500 samples per class)
-- Confirms no class imbalance exists
-
-### 2. Sample Image Grid
-- Displays representative lensing images from each class
-- Illustrates visual similarities between substructure types
-
-### 3. Training Curves (3-panel figure)
-- **Panel 1:** Train and Val Loss vs. Epoch
-- **Panel 2:** Train and Val Accuracy vs. Epoch
-- **Panel 3:** Train and Val AUC vs. Epoch
-
-### 4. ROC Curves (Multi-class, One-vs-Rest)
-- Per-class ROC curves with individual AUC scores
-- Micro-averaged and macro-averaged ROC curves
-- Diagonal reference line (random classifier baseline)
-
-### 5. Confusion Matrix
-- 3x3 heatmap: predictions vs. ground truth on the validation set
-- Raw counts and percentages per cell
-
----
-
-## 13. Evaluation Metrics
-
-Computed on the held-out validation set at the best checkpoint (epoch 27):
-
-| Metric | Value / Notes |
-|---|---|
-| **AUC (primary)** | **0.9947** (multiclass macro one-vs-rest) |
-| Accuracy | ~96.9% |
-| Confusion Matrix | 3x3, see visualizations |
-| Per-class Precision | Via `sklearn.classification_report` |
-| Per-class Recall | Via `sklearn.classification_report` |
-| Per-class F1-score | Via `sklearn.classification_report` |
-| ROC Curves | Plotted per-class + micro + macro |
-
----
-
-## 14. Engineering Details
-
-### Checkpointing
-- Best model saved to `./checkpoints/` (local) and `/content/drive/MyDrive/DeepLense_GsoC/checkpoints/` (Google Drive)
-- Triggered whenever a new best validation AUC is achieved
-
-### Mixed Precision Training (AMP)
-- `torch.cuda.amp.GradScaler` + `torch.cuda.amp.autocast`
-- Reduces memory footprint by ~50%; ~1.5-2x speedup on modern NVIDIA GPUs
-
-### Reproducibility
-- Fixed seeds: `SEED = 42` across `torch`, `numpy`, `random`
-- Deterministic data loading via `sorted(glob("*.npy"))`
-- Pre-split `train/` and `val/` directories ensure no leakage
-
-### Data Loading
-- Custom `Dataset` class for `.npy` files with arcsinh normalization baked in
-- `num_workers = 2` for parallel data loading
-
----
 
 ## 15. Observations and Discussion
 
