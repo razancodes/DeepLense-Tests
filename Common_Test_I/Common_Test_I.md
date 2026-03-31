@@ -1,8 +1,10 @@
 # Common Test I: Multi-Class Gravitational Lensing Classification — Experiment Report
 
 **Project:** ML4SCI DeepLense Foundation Model [DEEPLENSE4] as part of GSoC 2026.  
-**Contributor:** Muhammed Razan
-**Project Mentors:** Michael Toomey ,Sergei Gleyzer, Pranath Reddy, Anna Parul, J Rishi. 
+**Contributor:** Muhammed Razan.
+
+**Project Mentors:** Michael Toomey ,Sergei Gleyzer, Pranath Reddy, Anna Parul and J Rishi. 
+
 **Task:** Common Test I — Multi-Class Classification  
 **Model used:** ResNet34 as the backbone.
 
