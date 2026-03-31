@@ -11,13 +11,13 @@
 
 This repository contains my test submissions for the **ML4SCI DeepLense GSoC 2026** project. The goal is to build a physics-aware foundation model for dark matter substructure detection in simulated gravitational lensing images. Three experiments are presented, progressing from a strong transfer-learning baseline to a self-supervised foundation model with embedded physics.
 
+Link to the Model Weights: [Google Drive](https://drive.google.com/drive/folders/1aNzzPyFXHWAkzCvKtPckG-IOeGRsyiNH?usp=sharing)
+
 | # | Experiment | Task | Key Result |
 |---|---|---|---|
 | 1 | [Common Test I — ResNet34](Common_Test_I) | 3-class classification | AUC **0.9947** |
 | 2 | [Specific Task VII — PINN](SPECIFIC_TEST_VII) | Physics-guided classification | AUC **0.9958** |
 | 3 | [Specific Test IX — MAE Foundation Model](Specific_Test_IX) | Self-supervised pre-training + classification + super-resolution | AUC **0.9955** · PSNR **38.97 dB** |
-
-All experiments target the same physical problem: classifying dark matter substructure (no substructure / CDM subhalo / axion / vortex) from simulated single-channel gravitational lensing images stored as `.npy` files.
 
 ---
 
