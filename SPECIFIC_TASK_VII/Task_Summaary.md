@@ -1,9 +1,11 @@
-# Task II: Physics-Informed Neural Network (PINN) for Gravitational Lensing Classification
+# Specific Task VII: Physics-Informed Neural Network (PINN) for Gravitational Lensing Classification
 
 **Project:** ML4SCI DeepLense Foundation Model [DEEPLENSE4] as part of GSoC 2026.  
-**Contributor:** Muhammed Razan
-**Project Mentors:** Michael Toomey ,Sergei Gleyzer, Pranath Reddy, Anna Parul and J Rishi. 
-**Task:** Task II — Physics-Informed Classification  
+**Contributor:** Muhammed Razan.
+
+**Project Mentors:** Michael Toomey, Sergei Gleyzer, Pranath Reddy, Anna Parul and J Rishi. 
+
+**Task:** Task VII — Physics-Guided ML  
 **Model:** ResNet34 + SIS-Ansatz Physics Branch (PINN)
 
 ---
