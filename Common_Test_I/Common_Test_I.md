@@ -111,15 +111,17 @@ The dataset uses a **pre-defined directory split** (`train/` and `val/`) with a 
 
 ## 5. Data Preprocessing and Augmentation
 
-### Physics-Informed Preprocessing
+### Physics-Informed Preprocessing using ArcSinh
 
-The raw `.npy` lensing images undergo **arcsinh stretching** before being fed to the model:
+ArcSinh Strech Formula:
 
-```
-x_transformed = arcsinh(a * x) / arcsinh(a)   [where a = 5.0]
-```
+\begin{equation}
+    f(x) = \ln\left(a \cdot x + \sqrt{(a \cdot x)^2 + 1}\right)
+\end{equation}
 
-This non-linear transformation compresses the high dynamic range of astrophysical images (similar to the log transform in astronomy), while preserving relative structure in faint features. It is considered best practice for gravitational lensing data.
+here $a = 5.0$ was used, it is the softening parameter controlling the degree of compression. This transformation suppresses bright arc saturation while simultaneously amplifying faint substructure signals in the low-intensity regime, making it particularly effective for differentiating dark-matter models that manifest as subtle perturbations to the lensing signal.
+<img width="1607" height="709" alt="image" src="https://github.com/user-attachments/assets/3bd9db99-46d7-4114-b5fa-01d119213046" />
+
 
 ### Augmentation Strategy
 
@@ -128,7 +130,7 @@ This non-linear transformation compresses the high dynamic range of astrophysica
 | Gaussian Noise | `noise_std = 0.005` added during training |
 | Resize | 224x224 (for ImageNet compatibility) |
 | Normalization | Applied after arcsinh |
-| Heavy geometric augmentation | Not applied — lensing signal is subtle |
+| geometric augmentation | Random 90° Rotations, Horizontal and Vertical Flips |
 
 ### Batch Size
 
@@ -202,42 +204,6 @@ For each epoch:
 
 ## 9. Training Metrics — Epoch-by-Epoch Results
 
-`*` denotes new best validation AUC at that epoch.
-
-| Epoch | Train Loss | Train Acc | Train AUC | Val Loss | Val Acc | Val AUC | LR |
-|---|---|---|---|---|---|---|---|
-| 1 | 1.2538 | 0.336 | 0.5204 | 1.2443 | 0.339 | 0.5062 | 2.00e-05 * |
-| 2 | 0.9516 | 0.544 | 0.7426 | 0.7635 | 0.707 | 0.8736 | 4.00e-05 * |
-| 3 | 0.6406 | 0.797 | 0.9284 | 0.5685 | 0.851 | 0.9572 | 6.00e-05 * |
-| 4 | 0.5347 | 0.866 | 0.9626 | 0.5226 | 0.876 | 0.9706 | 8.00e-05 * |
-| 5 | 0.4941 | 0.892 | 0.9725 | 0.4704 | 0.905 | 0.9793 | 1.00e-04 * |
-| 6 | 0.4746 | 0.903 | 0.9767 | 0.4661 | 0.905 | 0.9824 | 9.96e-05 * |
-| 7 | 0.4486 | 0.918 | 0.9820 | 0.4323 | 0.926 | 0.9867 | 9.84e-05 * |
-| 8 | 0.4352 | 0.925 | 0.9848 | 0.4456 | 0.924 | 0.9834 | 9.65e-05 |
-| 9 | 0.4244 | 0.930 | 0.9862 | 0.4722 | 0.916 | 0.9820 | 9.39e-05 |
-| 10 | 0.4127 | 0.938 | 0.9880 | 0.4099 | 0.938 | 0.9885 | 9.05e-05 * |
-| 11 | 0.4031 | 0.943 | 0.9897 | 0.3976 | 0.945 | 0.9903 | 8.66e-05 * |
-| 12 | 0.3983 | 0.945 | 0.9903 | 0.4014 | 0.944 | 0.9900 | 8.21e-05 |
-| 13 | 0.3907 | 0.949 | 0.9915 | 0.3946 | 0.948 | 0.9912 | 7.70e-05 * |
-| 14 | 0.3862 | 0.951 | 0.9920 | 0.3884 | 0.951 | 0.9913 | 7.16e-05 * |
-| 15 | 0.3793 | 0.955 | 0.9927 | 0.3977 | 0.945 | 0.9915 | 6.58e-05 * |
-| 16 | 0.3731 | 0.959 | 0.9936 | 0.3836 | 0.954 | 0.9926 | 5.98e-05 * |
-| 17 | 0.3683 | 0.961 | 0.9940 | 0.3903 | 0.951 | 0.9913 | 5.36e-05 |
-| 18 | 0.3635 | 0.963 | 0.9947 | 0.3803 | 0.954 | 0.9932 | 4.74e-05 * |
-| 19 | 0.3587 | 0.966 | 0.9955 | 0.3766 | 0.955 | 0.9934 | 4.12e-05 * |
-| 20 | 0.3535 | 0.969 | 0.9959 | 0.3728 | 0.959 | 0.9937 | 3.52e-05 * |
-| 21 | 0.3512 | 0.970 | 0.9960 | 0.3683 | 0.961 | 0.9937 | 2.94e-05 |
-| 22 | 0.3464 | 0.972 | 0.9966 | 0.3646 | 0.964 | 0.9933 | 2.40e-05 |
-| 23 | 0.3396 | 0.976 | 0.9971 | 0.3727 | 0.962 | 0.9925 | 1.89e-05 |
-| 24 | 0.3371 | 0.978 | 0.9973 | 0.3631 | 0.966 | 0.9941 | 1.44e-05 * |
-| 25 | 0.3346 | 0.978 | 0.9975 | 0.3651 | 0.965 | 0.9944 | 1.05e-05 * |
-| 26 | 0.3304 | 0.981 | 0.9979 | 0.3594 | 0.966 | 0.9944 | 7.12e-06 * |
-| **27** | **0.3286** | **0.982** | **0.9980** | **0.3575** | **0.969** | **0.9947** | **4.48e-06 \*** |
-| 28 | 0.3267 | 0.983 | 0.9980 | 0.3604 | 0.968 | 0.9945 | 2.56e-06 |
-| 29 | 0.3252 | 0.983 | 0.9981 | 0.3581 | 0.969 | 0.9942 | 1.39e-06 |
-| 30 | 0.3239 | 0.984 | 0.9983 | 0.3579 | 0.969 | 0.9943 | 1.00e-06 |
-
----
 <img width="2144" height="616" alt="image" src="https://github.com/user-attachments/assets/730607f2-9578-49bc-9049-12bed7e942f2" />
 
 ## 10. Final Results Summary
@@ -251,20 +217,13 @@ For each epoch:
 | Train Accuracy (final, epoch 30) | 98.4% |
 | Train Loss (final, epoch 30) | 0.3239 |
 
-### Key Learning Milestones
-
-| Milestone | Epoch | Val AUC |
-|---|---|---|
-| Model begins learning (>50% AUC) | 1 | 0.5062 |
-| Val AUC crosses 0.90 | 5 | 0.9793 |
-| Val AUC crosses 0.99 | 11 | 0.9903 |
-| **Peak AUC — best checkpoint saved** | **27** | **0.9947** |
-
 ---
+<img width="944" height="824" alt="image" src="https://github.com/user-attachments/assets/4f701fd3-44a7-4541-b329-d92852b025d5" />
+<img width="1605" height="677" alt="image" src="https://github.com/user-attachments/assets/684deb32-6f8d-476b-b7da-732f1eebc398" />
 
 
 
-## 15. Observations and Discussion
+## 11. Observations and Discussion
 
 ### Strengths
 1. **High AUC (0.9947):** Near-ceiling performance, demonstrating effective transfer learning from ImageNet to gravitational lensing.
@@ -280,7 +239,7 @@ For each epoch:
 
 ---
 
-## 16. Relation to the Foundation Model Goal
+## 12. Relation to the Foundation Model Goal
 
 This experiment establishes the **supervised ResNet34 baseline** (Common Test I) for the ML4SCI DeepLense GSoC 2026 proposal. The AUC of **0.9947** is the reference point against which more advanced approaches are compared:
 
@@ -292,7 +251,7 @@ The goal across these experiments is to show that physics-aware and self-supervi
 
 ---
 
-## 17. Reproducibility Checklist
+## 13. Reproducibility Checklist
 
 | Item | Status |
 |---|---|
