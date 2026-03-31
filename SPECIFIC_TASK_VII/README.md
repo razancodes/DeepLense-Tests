@@ -51,6 +51,48 @@ The branch:
 
 ## 4. HyperParameters: 
 
+All hyperparameters are managed via a centralized `PINNConfig` dataclass:
+
+```python
+@dataclass
+class PINNConfig:
+    # Dataset
+    data_root: str = "./dataset"
+    classes: tuple = ("no_sub", "subhalo", "vortex")
+    num_classes: int = 3
+    native_size: int = 150          # Raw image size (no upsampling needed)
+    val_split: float = 0.15
+
+    # Preprocessing
+    arcsinh_a: float = 5.0          # Physics-informed normalization
+    noise_std: float = 0.005        # Augmentation noise
+
+    # Training stages
+    stage1_epochs: int = 20         # Physics warmup (backbone frozen)
+    stage2_epochs: int = 40         # Joint fine-tuning (backbone unfrozen)
+    batch_size: int = 64
+
+    # Learning rates
+    stage1_head_lr: float = 3e-4    # Stage 1: head only
+    stage2_backbone_lr: float = 5e-5 # Stage 2: backbone (lower LR)
+    stage2_head_lr: float = 3e-4    # Stage 2: head
+
+    # Physics
+    stage1_physics_weight: float = 0.1    # λ_phys Stage 1
+    stage2_physics_weight: float = 0.01   # λ_phys Stage 2 (reduced)
+    smooth_weight: float = 1.0            # TV-norm weight in physics loss
+    compact_weight: float = 0.1           # Compactness weight in physics loss
+
+    # Regularization
+    weight_decay: float = 0.05
+    label_smoothing: float = 0.1
+    grad_clip: float = 1.0
+    early_stopping_patience: int = 10
+
+    # Checkpoints
+    ckpt_dir: str = "./checkpoints_pinn"
+```
+
 ### Key Hyperparameter Choices
 
 - **`native_size = 150`**: No upsampling — the physics branch operates at the native resolution to preserve lensing geometry.
