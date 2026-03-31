@@ -2,7 +2,7 @@
 
 **Project:** DeepLense Foundation Model for Gravitational Lensing [DEEPLENSE4]  
 **Contributor:** Muhammed Razan  
-**Mentors:** Michael Toomey · Sergei Gleyzer · Pranath Reddy · Anna Parul · J Rishi
+**Mentors:** [Michael Toomey](https://www.michael-toomey.com/) · [Sergei Gleyzer](sergeigleyzer.com) · [Pranath Reddy](https://scholar.google.com/citations?user=sq-LU5kAAAAJ&hl=en) · Anna Parul · [J Rishi](https://scholar.google.com/citations?user=7Kb5PhsAAAAJ&hl=en)
 
 ---
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/eac297db-986f-4434-9d1e-05a7bd9db575" />
@@ -13,9 +13,9 @@ This repository contains my test submissions for the **ML4SCI DeepLense GSoC 202
 
 | # | Experiment | Task | Key Result |
 |---|---|---|---|
-| 1 | [Common Test I — ResNet34](#Common_Test_I) | 3-class classification | AUC **0.9947** |
-| 2 | [Specific Task VII — PINN](#SPECIFIC_TEST_VII) | Physics-guided classification | AUC **0.9958** |
-| 3 | [Specific Test IX — MAE Foundation Model](#SPECIFIC_TEST_IX) | Self-supervised pre-training + classification + super-resolution | AUC **0.9955** · PSNR **38.97 dB** |
+| 1 | [Common Test I — ResNet34](Common_Test_I) | 3-class classification | AUC **0.9947** |
+| 2 | [Specific Task VII — PINN](SPECIFIC_TEST_VII) | Physics-guided classification | AUC **0.9958** |
+| 3 | [Specific Test IX — MAE Foundation Model](Specific_Test_IX) | Self-supervised pre-training + classification + super-resolution | AUC **0.9955** · PSNR **38.97 dB** |
 
 All experiments target the same physical problem: classifying dark matter substructure (no substructure / CDM subhalo / axion / vortex) from simulated single-channel gravitational lensing images stored as `.npy` files.
 
@@ -23,7 +23,6 @@ All experiments target the same physical problem: classifying dark matter substr
 
 ## Common Test I — ResNet34 Baseline
 
-**Notebook:** `Common_Test_I_ResNet34.ipynb`  
 **Task:** 3-class classification (`no_sub`, `subhalo`, `vortex`) — 37,500 balanced samples.
 
 ### Architecture
@@ -67,9 +66,7 @@ Strong convergence with no overfitting observed across 30 epochs, demonstrating 
 
 ## Specific Task VII — Physics-Informed Neural Network
 
-**Notebook:** `task2_final.ipynb`  
 **Task:** Same 3-class classification, but with a **differentiable physics constraint** embedded in the architecture.  
-**Details:** [`task2_pinn_results.md`](task2_pinn_results.md)
 
 ### Architecture
 
@@ -118,17 +115,14 @@ L_total  = L_ce + λ_phys · L_phys
 | Model | Val Acc | Val AUC | Physics-Consistent |
 |---|---|---|---|
 | ResNet34 (baseline) | ~96.9% | 0.9947 | ✗ |
-| **PINN-ResNet34** | 96.71% | **0.9958** | ✅ |
+| **PINN-ResNet34** | 96.71% | **0.9958** | ✓ |
 
 The PINN surpasses the baseline AUC while also producing interpretable **k(x,y) lens-strength maps**, **source-plane reconstructions**, and **deflection vector fields** — grounding predictions in the physical lensing equation.
 
 ---
 
 ## Specific Test IX — MAE Foundation Model
-
-**Notebooks:** `Specific_Test_IX_Foundation_Model_75_Mask.ipynb` · `Specific_Test_IX_Foundation_Model_90_Mask.ipynb`  
 **Tasks:** A) 3-class dark matter classification (`no_sub`, `cdm`, `axion`) · B) 4× gravitational lens super-resolution  
-**Details:** [`test9_foundation_model_results.md`](test9_foundation_model_results.md)
 
 ### Architecture
 
@@ -195,17 +189,17 @@ Per-class breakdown (MAE-90 best model, 95.94% overall accuracy):
 
 ## Overall Results at a Glance
 
-| Experiment | Model | Val AUC | Val Acc | Notes |
+| Experiment | Best Model | Metric 1 | Metric 2 | Notes |
 |---|---|---|---|---|
-| Common Test I | ResNet34 | 0.9947 | 96.9% | Transfer learning baseline |
-| Specific Task VII | PINN-ResNet34 | **0.9958** | 96.71% | SIS physics embedded in architecture |
-| Specific Test IX (clf) | MAE-90 ViT | **0.9955** | 95.94% | Self-supervised, 3 new classes |
-| Specific Test IX (SR) | MAE-75 ViT | — | — | PSNR **38.97 dB**, SSIM **0.9949** |
+| Common Test I — Classification | ResNet34 | AUC **0.9947** | Acc **96.9%** | Transfer learning baseline |
+| Specific Task VII — Classification | PINN-ResNet34 | AUC **0.9958** | Acc **96.71%** | SIS physics embedded in architecture |
+| Specific Test IX — Classification | MAE-90 ViT | AUC **0.9955** | Acc **95.94%** | Self-supervised pre-training, 3 new classes |
+| Specific Test IX — Super-Resolution | MAE-75 ViT | PSNR **38.97 dB** | SSIM **0.9949** | 4× upsampling, MAE encoder fine-tuned ||
 
 ---
 ## Reproducing Results
 
-All notebooks are designed to run on **Google Colab** with a GPU runtime (Runtime → Change runtime type → T4 GPU).
+All notebooks are designed to run on **Google Colab** with a T4 GPU runtime.
 
 ### Common Test I & Specific Task VII (PINN)
 
