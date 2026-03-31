@@ -151,6 +151,7 @@ sr_lr        = 5e-5
 ---
 
 ## 4. Datasets
+<img width="1459" height="886" alt="image" src="https://github.com/user-attachments/assets/e1a8fb21-87eb-4eba-85c9-8ca8a958381d" />
 
 ### Task IX.A — Classification
 
@@ -212,6 +213,7 @@ Three experiments are run per masking ratio configuration:
 | **10** | **0.00037** | **0.00034** | **0.00026** | **0.00034** | **0.00032** | **0.00025** |
 
 **Best MAE val loss: `0.00034`** (epoch 10)
+<img width="1789" height="490" alt="image" src="https://github.com/user-attachments/assets/1893d923-464b-484a-a953-6204ea8e6dbc" />
 
 ---
 
@@ -230,8 +232,10 @@ Three experiments are run per masking ratio configuration:
 | Epoch | Train Loss | Train Acc | Val Loss | Val Acc | Val AUC |
 |---|---|---|---|---|---|
 | 10 | 0.2248 | 0.910 | 0.1755 | 0.929 | **0.9896** |
+<img width="1789" height="490" alt="image" src="https://github.com/user-attachments/assets/91f4a77d-d3bb-4c6a-a6e2-60d574ae46d5" />
 
 **MAE-Pretrained ViT best AUC: `0.9896`** (epoch 10)
+<img width="1779" height="886" alt="image" src="https://github.com/user-attachments/assets/a272d38c-e62f-45de-b944-20cb505e72e0" />
 
 #### Per-Class Classification Report (MAE-75, Best Model)
 
@@ -243,6 +247,7 @@ Three experiments are run per masking ratio configuration:
 | `axion` | 0.9368 | 0.9070 | 0.9217 | 2,990 |
 | **Macro avg** | 0.9289 | 0.9296 | 0.9289 | 8,911 |
 | **Weighted avg** | 0.9289 | 0.9293 | 0.9287 | 8,911 |
+<img width="1167" height="490" alt="image" src="https://github.com/user-attachments/assets/0707aaf4-ba1f-4074-bb48-0966526f9957" />
 
 **Key observation:** `no_sub` achieves perfect recall (1.0000), meaning the model never misses a smooth (no substructure) lens. The harder discrimination is between `cdm` and `axion`, which represent different dark matter particle candidates with more subtle lensing signatures.
 
@@ -253,6 +258,8 @@ Three experiments are run per masking ratio configuration:
 | Epoch | Train MSE | Val MSE | Val PSNR (dB) | Val SSIM |
 |---|---|---|---|---|
 | **10** | **0.000147** | **0.000135** | **38.97** | **0.9949** |
+<img width="1790" height="490" alt="image" src="https://github.com/user-attachments/assets/93db0ede-6d52-4199-ab50-6e12e1259091" />
+<img width="1781" height="1180" alt="image" src="https://github.com/user-attachments/assets/260f6f4a-6af9-4f51-aa01-4ee786a7f1e7" />
 
 #### Final SR Results (MAE-75)
 
@@ -290,13 +297,17 @@ Three experiments are run per masking ratio configuration:
 | **10** | **0.5561** | **0.786** | **0.3444** | **0.862** | **0.9633** |
 
 **Scratch ViT best AUC: `0.9633`**
+<img width="1779" height="886" alt="image" src="https://github.com/user-attachments/assets/2a2a844f-eef2-413a-a1dc-8eeca9af9252" />
 
 #### MAE-Pretrained ViT (MAE-90)
 
 | Epoch | Train Loss | Train Acc | Val Loss | Val Acc | Val AUC |
 |---|---|---|---|---|---|
 | 6 | 0.1857 | 0.931 | 0.1153 | 0.959 | **0.9955** |
+<img width="1590" height="590" alt="image" src="https://github.com/user-attachments/assets/b567e34f-1fad-4944-beca-7a63dfe08b88" />
+<img width="1167" height="490" alt="image" src="https://github.com/user-attachments/assets/473ab099-1fd9-43d8-8465-677c90d25d67" />
 
+<img width="1790" height="490" alt="image" src="https://github.com/user-attachments/assets/98db3e2e-84cc-463e-a714-e62bc4e27253" />
 
 **MAE-Pretrained ViT best AUC: `0.9955`**  (epoch 6)
 
@@ -311,6 +322,7 @@ Three experiments are run per masking ratio configuration:
 | `axion` | **0.9809** | 0.9438 | 0.9620 | 2,990 |
 | **Macro avg** | 0.9600 | 0.9595 | 0.9595 | 8,911 |
 | **Weighted avg** | 0.9600 | 0.9594 | 0.9595 | 8,911 ||
+<img width="1779" height="886" alt="image" src="https://github.com/user-attachments/assets/011c2db4-9b9c-40f2-8344-89a33df3d2d2" />
 
 ---
 
@@ -356,6 +368,8 @@ The counter-intuitive result — that **more extreme masking (90%) produces a be
 **Winner for super-resolution: MAE-75** (`38.97 dB` vs `29.48 dB` — a difference of ~9.5 dB)
 
 The 75% mask ratio produces vastly superior SR quality. This is because the SR task requires the encoder to capture fine spatial detail and local pixel relationships — information that is systematically destroyed by 90% masking during pre-training. The encoder pre-trained with 75% masking retains more spatially precise representations suitable for pixel-level reconstruction.
+<img width="1790" height="490" alt="image" src="https://github.com/user-attachments/assets/ee34d30f-5121-42eb-bdb5-f9b7ab967e9e" />
+<img width="1781" height="1180" alt="image" src="https://github.com/user-attachments/assets/b19700bc-e6d6-4553-9421-fb3747bd707e" />
 
 ### Combined Analysis
 
@@ -435,6 +449,7 @@ This experiment successfully demonstrates a **self-supervised foundation model p
 3. **The MAE-90 classifier** achieves near-perfect precision on all three classes (no_sub: 0.975, cdm: 0.925, axion: 0.981) with an overall accuracy of **95.94%** — making it strong enough for deployment in automated dark matter survey pipelines.
 
 These results motivate a **multi-task foundation model** where the backbone can be adapted at inference time to different downstream objectives — a direction central to the proposed GSoC DeepLense Foundation Model project.
+<img width="1600" height="1045" alt="image" src="https://github.com/user-attachments/assets/9375ff13-b7c6-40bd-aa55-0d123a2cd676" />
 
 ---
 
