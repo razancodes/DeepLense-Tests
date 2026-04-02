@@ -2,7 +2,7 @@
 
 **Project:** DeepLense Foundation Model for Gravitational Lensing [DEEPLENSE4]  
 **Contributor:** Muhammed Razan  
-**Mentors:** [Michael Toomey](https://www.michael-toomey.com/) · [Sergei Gleyzer](sergeigleyzer.com) · [Pranath Reddy](https://scholar.google.com/citations?user=sq-LU5kAAAAJ&hl=en) · Anna Parul · [J Rishi](https://scholar.google.com/citations?user=7Kb5PhsAAAAJ&hl=en)
+**Mentors:** [Michael Toomey](https://www.michael-toomey.com/) · [Sergei Gleyzer](https://sergeigleyzer.com/) · [Pranath Reddy](https://scholar.google.com/citations?user=sq-LU5kAAAAJ&hl=en) · Anna Parul · [J Rishi](https://scholar.google.com/citations?user=7Kb5PhsAAAAJ&hl=en)
 
 ---
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/eac297db-986f-4434-9d1e-05a7bd9db575" />
